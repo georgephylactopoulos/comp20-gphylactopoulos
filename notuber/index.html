@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+        <head>
+
+                <script>
+                        myLat = 0;
+                        myLng = 0;
+
+                        function getMyLocation() {
+                                navigator.geolocation.getCurrentPosition(function(position) {
+                                        myLat = position.coords.latitude;
+                                        myLng = position.coords.longitude;
+                                        console.log(myLat);
+                                        console.log(myLng);
+                                });
+                        }
+
+
+                </script>
+        </head>
+
+        <body onload="getMyLocation()">
+        </body>
+</html>
