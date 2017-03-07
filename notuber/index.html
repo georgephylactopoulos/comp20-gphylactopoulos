@@ -15,40 +15,40 @@
                                         myLat = position.coords.latitude;
                                         myLng = position.coords.longitude;
 
-                                var mylocation = new google.maps.LatLng(myLat,myLng);
+                                        var mylocation = new google.maps.LatLng(myLat,myLng);
 
-                                console.log(myLat,myLng);
+                                        console.log(myLat,myLng);
 
-                                                                // Set up map
-                                var myOptions = {
-                                        zoom: 13,
-                                        center: mylocation,
-                                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                                };
+                                                                        // Set up map
+                                        var myOptions = {
+                                                zoom: 13,
+                                                center: mylocation,
+                                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                                        };
 
-                                // Create the map in the "map_canvas" <div>
-                                var map = new google.maps.Map(document.getElementById("map"), myOptions)
+                                        // Create the map in the "map_canvas" <div>
+                                        var map = new google.maps.Map(document.getElementById("map"), myOptions)
 
 
-                                //Icon for myself on map
-                                var mylocationicon = 'me_icon.png'
+                                        //Icon for myself on map
+                                        var mylocationicon = 'me_icon.png'
 
-                                // Create a marker
-                                var marker = new google.maps.Marker({
-                                        position: mylocation,
-                                        icon: mylocationicon
-                                });
-                                marker.setMap(map);
+                                        // Create a marker
+                                        var marker = new google.maps.Marker({
+                                                position: mylocation,
+                                                icon: mylocationicon,
+                                                title: "Username: itShXf78"
+                                        });
+                                        marker.setMap(map);
 
-                                });
+                                        // Create a global info window
+                                        var infowindow = new google.maps.InfoWindow();
 
-                                // Create a global info window
-                                var infowindow = new google.maps.InfoWindow();
-
-                                // Open info window on click of marker
-                                google.maps.event.addListener(marker, 'click', function() {
-                                        infowindow.setContent(marker.title);
-                                        infowindow.open(map, marker);
+                                                // Open info window on click of marker
+                                                google.maps.event.addListener(marker, 'click', function() {
+                                                        infowindow.setContent(marker.title);
+                                                        infowindow.open(map, marker);
+                                                });
                                 });
                         }
 
