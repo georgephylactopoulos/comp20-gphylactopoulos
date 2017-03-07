@@ -2,17 +2,53 @@
 
 <html>
         <head>
-
+                <link rel="stylesheet" href="style.css" />
+                <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
                 <script>
                         myLat = 0;
                         myLng = 0;
 
-                        function getMyLocation() {
+                        function init() {
+
+                                //get my location
                                 navigator.geolocation.getCurrentPosition(function(position) {
                                         myLat = position.coords.latitude;
                                         myLng = position.coords.longitude;
-                                        console.log(myLat);
-                                        console.log(myLng);
+
+                                var mylocation = new google.maps.LatLng(myLat,myLng);
+
+                                console.log(myLat,myLng);
+
+                                                                // Set up map
+                                var myOptions = {
+                                        zoom: 13,
+                                        center: mylocation,
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                                };
+
+                                // Create the map in the "map_canvas" <div>
+                                var map = new google.maps.Map(document.getElementById("map"), myOptions)
+
+
+                                //Icon for myself on map
+                                var mylocationicon = 'me_icon.png'
+
+                                // Create a marker
+                                var marker = new google.maps.Marker({
+                                        position: mylocation,
+                                        icon: mylocationicon
+                                });
+                                marker.setMap(map);
+
+                                });
+
+                                // Create a global info window
+                                var infowindow = new google.maps.InfoWindow();
+
+                                // Open info window on click of marker
+                                google.maps.event.addListener(marker, 'click', function() {
+                                        infowindow.setContent(marker.title);
+                                        infowindow.open(map, marker);
                                 });
                         }
 
@@ -20,6 +56,7 @@
                 </script>
         </head>
 
-        <body onload="getMyLocation()">
+        <body onload="init()">
+                <div id="map"></div>
         </body>
 </html>
