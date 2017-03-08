@@ -37,7 +37,7 @@
                                         var marker = new google.maps.Marker({
                                                 position: mylocation,
                                                 icon: mylocationicon,
-                                                title: "Username: itShXf78"
+                                                title: "Username:itShXf78"
                                         });
                                         marker.setMap(map);
 
@@ -49,8 +49,35 @@
                                                         infowindow.setContent(marker.title);
                                                         infowindow.open(map, marker);
                                                 });
+
+                                        //make a new XML request
+                                        request = new XMLHttpRequest();
+
+                                        request.open("POST", "https://defense-in-derpth.herokuapp.com/submit");
+
+
+                                        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                                        request.onreadystatechange = function() {
+                                                if (request.readyState == 4 && request.status == 200) {
+                                                        elements = JSON.parse(request.responseText);
+                                                        if (Object.keys(elements)[0]=="passengers") {
+                                                                console.log(" u are a driver");
+                                                        }
+                                                        if (Object.keys(elements)[0]=="vehicles") {
+                                                                console.log(" u are a passenger");
+                                                        }
+                                                }
+                                        }
+
+                                        var request_string = "username=itShXf78&lat="
+                                        request_string = request_string.concat(myLat);
+                                        request_string = request_string.concat("&lng=");
+                                        request_string = request_string.concat(myLng);
+                                        request.send(request_string);
                                 });
                         }
+
 
 
                 </script>
