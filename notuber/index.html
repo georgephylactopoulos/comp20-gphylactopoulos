@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
 <html>
+        <meta charset="UTF-8"> 
         <head>
                 <link rel="stylesheet" href="style.css" />
-                <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+                <script src="https://maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>
                 <script>
                         myLat = 0;
                         myLng = 0;
@@ -16,8 +17,6 @@
                                         myLng = position.coords.longitude;
 
                                         var mylocation = new google.maps.LatLng(myLat,myLng);
-
-                                        console.log(myLat,myLng);
 
                                         // Set up map
                                         var myOptions = {
@@ -33,6 +32,7 @@
                                         //Icon for myself on map
                                         var mylocationicon = 'me_icon.png'
                                         var passengericon = 'passenger.png'
+                                        var vehicleicon = 'black_car.png'
 
                                         // Create a marker
                                         var marker = new google.maps.Marker({
@@ -63,14 +63,25 @@
                                                 if (request.readyState == 4 && request.status == 200) {
                                                         elements = JSON.parse(request.responseText);
                                                         if (Object.keys(elements)[0]=="passengers") {
-                                                           //     console.log(elements['passengers']);
                                                                 for (i = 0; i < (elements['passengers'].length); i++) {
                                                                         var location = new google.maps.LatLng(elements['passengers'][i]['lat'],elements['passengers'][i]['lng']);
+                                                                        
+                                                                        distance_from_me_meters= 
+                                                                        google.maps.geometry.spherical.computeDistanceBetween(mylocation,
+                                                                         location);
+
+                                                                        distance_from_me_miles = distance_from_me_meters * 0.000621371192;
+
+                                                                        marker_text = elements['passengers'][i]['username'];
+                                                                        marker_text = marker_text.concat(" is ");
+                                                                        marker_text = marker_text.concat(distance_from_me_miles);
+                                                                        marker_text = marker_text.concat(" miles away from me.");
+
                                                                         // Create a marker
                                                                         marker2 = new google.maps.Marker({
                                                                                 position: location,
                                                                                 icon: passengericon,
-                                                                                title: elements['passengers'][i]['username']
+                                                                                title: marker_text
                                                                         });
                                                                         marker2.setMap(map);
 
@@ -82,7 +93,34 @@
                                                                 }
                                                         }
                                                         if (Object.keys(elements)[0]=="vehicles") {
-                                                                console.log(" u are a passenger");
+                                                                for (i = 0; i < (elements['vehicles'].length); i++) {
+                                                                        var location = new google.maps.LatLng(elements['vehicles'][i]['lat'],elements['vehicles'][i]['lng']);
+                                                                        
+                                                                        distance_from_me_meters= 
+                                                                        google.maps.geometry.spherical.computeDistanceBetween(mylocation,
+                                                                         location);
+
+                                                                        distance_from_me_miles = distance_from_me_meters * 0.000621371192;
+
+                                                                        marker_text = elements['vehicles'][i]['username'];
+                                                                        marker_text = marker_text.concat(" is ");
+                                                                        marker_text = marker_text.concat(distance_from_me_miles);
+                                                                        marker_text = marker_text.concat(" miles away from me.");
+
+                                                                        // Create a marker
+                                                                        marker2 = new google.maps.Marker({
+                                                                                position: location,
+                                                                                icon: vehicleicon,
+                                                                                title: marker_text
+                                                                        });
+                                                                        marker2.setMap(map);
+
+                                                                        google.maps.event.addListener(marker2, 'click', function() {
+                                                                                infowindow.setContent(this.title);
+                                                                                infowindow.open(map, this);
+                                                                        });
+
+                                                                }
                                                         }
                                                 }
                                         }
