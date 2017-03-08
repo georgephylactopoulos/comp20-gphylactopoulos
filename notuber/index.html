@@ -19,9 +19,9 @@
 
                                         console.log(myLat,myLng);
 
-                                                                        // Set up map
+                                        // Set up map
                                         var myOptions = {
-                                                zoom: 13,
+                                                zoom: 16,
                                                 center: mylocation,
                                                 mapTypeId: google.maps.MapTypeId.ROADMAP
                                         };
@@ -32,23 +32,24 @@
 
                                         //Icon for myself on map
                                         var mylocationicon = 'me_icon.png'
+                                        var passengericon = 'passenger.png'
 
                                         // Create a marker
                                         var marker = new google.maps.Marker({
                                                 position: mylocation,
                                                 icon: mylocationicon,
-                                                title: "Username:itShXf78"
+                                                title: "itShXf78"
                                         });
                                         marker.setMap(map);
 
                                         // Create a global info window
                                         var infowindow = new google.maps.InfoWindow();
 
-                                                // Open info window on click of marker
-                                                google.maps.event.addListener(marker, 'click', function() {
-                                                        infowindow.setContent(marker.title);
-                                                        infowindow.open(map, marker);
-                                                });
+                                        // Open info window on click of marker
+                                        google.maps.event.addListener(marker, 'click', function() {
+                                                infowindow.setContent(marker.title);
+                                                infowindow.open(map, marker);
+                                        });
 
                                         //make a new XML request
                                         request = new XMLHttpRequest();
@@ -62,7 +63,23 @@
                                                 if (request.readyState == 4 && request.status == 200) {
                                                         elements = JSON.parse(request.responseText);
                                                         if (Object.keys(elements)[0]=="passengers") {
-                                                                console.log(" u are a driver");
+                                                           //     console.log(elements['passengers']);
+                                                                for (i = 0; i < (elements['passengers'].length); i++) {
+                                                                        var location = new google.maps.LatLng(elements['passengers'][i]['lat'],elements['passengers'][i]['lng']);
+                                                                        // Create a marker
+                                                                        marker2 = new google.maps.Marker({
+                                                                                position: location,
+                                                                                icon: passengericon,
+                                                                                title: elements['passengers'][i]['username']
+                                                                        });
+                                                                        marker2.setMap(map);
+
+                                                                        google.maps.event.addListener(marker2, 'click', function() {
+                                                                                infowindow.setContent(this.title);
+                                                                                infowindow.open(map, this);
+                                                                        });
+
+                                                                }
                                                         }
                                                         if (Object.keys(elements)[0]=="vehicles") {
                                                                 console.log(" u are a passenger");
@@ -75,6 +92,7 @@
                                         request_string = request_string.concat("&lng=");
                                         request_string = request_string.concat(myLng);
                                         request.send(request_string);
+                               
                                 });
                         }
 
